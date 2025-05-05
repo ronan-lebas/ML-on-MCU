@@ -113,11 +113,14 @@ _, _, class_report, conf_matrix = eval_model(
 )
 print("Done Evaluating Model")
 
+print("Saving Model and Reports...")
 os.makedirs("reports", exist_ok=True)
 timestamp = time.strftime("%Y%m%d-%H%M%S")
 os.makedirs(f"reports/{timestamp}", exist_ok=True)
 with open(f"reports/{timestamp}/class_report.txt", "w") as f:
     f.write(class_report)
+model_path = f"reports/{timestamp}/model.pth"
+torch.save(model.state_dict(), model_path)
 plt.figure(figsize=(10, 8))
 sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Blues", xticklabels=test_loader.dataset.classes, yticklabels=test_loader.dataset.classes)
 plt.title("Confusion Matrix")
@@ -126,3 +129,9 @@ plt.ylabel("Actual")
 plt.tight_layout()
 plt.savefig(f"reports/{timestamp}/conf_matrix.png")
 plt.close()
+if using_wandb:
+    wandb.log({"conf_matrix": wandb.Image(f"reports/{timestamp}/conf_matrix.png")})
+    wandb.save(model_path)
+    wandb.finish()
+print("Done Saving Model and Reports")
+print("All done!")
