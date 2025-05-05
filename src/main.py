@@ -1,28 +1,108 @@
 import torch
 from torch.utils.data import DataLoader
+import torchaudio.transforms as T
 from dataloader import SpeechCommandsDataset
 from model import AudioCNN
 from training import train_model
+from evaluating import eval_model
 from dotenv import load_dotenv
 import os
 
+
 load_dotenv()
 dataset_path = os.getenv("DATASET_PATH")
-dataset = SpeechCommandsDataset(dataset_path)
 
-dataloader = DataLoader(dataset, batch_size=128, shuffle=True)
+config = {
+    'num_epochs': 10,
+    'batch_size': 32,
+    'max_sample_per_class': 100,
+    'only_classes': ["yes", "no", "on", "off"],
+    'sampling_rate': 8000,
+}
 
-# Iterate through one batch
-for batch_waveforms, batch_labels in dataloader:
-    print(batch_waveforms.shape)  # [B, 1, N]
-    print(batch_labels)
-    break
+using_wandb = True
+if using_wandb:
+    import wandb
+    wandb.init(
+        project="ML-on-MCU",
+        entity="ronan-lebas-projects",
+        config=config,
+    )
 
-model = AudioCNN(num_classes=len(dataset.classes), in_channels=1)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
+print(f"Using device: {device}")
+
+transform = T.MFCC(
+    sample_rate=config['sampling_rate'],
+    n_mfcc=40,
+    melkwargs={
+        "n_fft": 400,
+        "hop_length": 160,
+        "n_mels": 64
+    }
+)
+print("Loading Train dataset...")
+train_loader = DataLoader(
+    SpeechCommandsDataset(
+        dataset_path,
+        "TRAIN",
+        sampling_rate=config['sampling_rate'],
+        transform=transform,
+        max_sample_per_class=config['max_sample_per_class'],
+        only_classes=config['only_classes']
+    ),
+    batch_size=config['batch_size'],
+    shuffle=True
+)
+print("Done loading Train dataset")
+print("Loading Validation dataset...")
+
+val_loader = DataLoader(
+    SpeechCommandsDataset(
+        dataset_path,
+        "VAL",
+        sampling_rate=config['sampling_rate'],
+        transform=transform,
+        max_sample_per_class=config['max_sample_per_class'],
+        only_classes=config['only_classes']
+    ),
+    batch_size=config['batch_size'],
+    shuffle=False
+)
+print("Done loading Validation dataset")
+print("Loading Test dataset...")
+
+test_loader = DataLoader(
+    SpeechCommandsDataset(
+        dataset_path,
+        "TEST",
+        sampling_rate=config['sampling_rate'],
+        transform=transform,
+        max_sample_per_class=config['max_sample_per_class'],
+        only_classes=config['only_classes']
+    ),
+    batch_size=config['batch_size'],
+    shuffle=False
+)
+print("Done loading Test dataset")
+print("Loading Model...")
+
+model = AudioCNN(num_classes=len(train_loader.dataset.classes), in_channels=1)
+print("Done loading Model")
+print("Training Model...")
 
 train_model(
     model=model,
-    dataloader=dataloader,
+    train_loader=train_loader,
+    val_loader=val_loader,
     device=device
 )
+print("Done Training Model")
+
+print("Evaluating Model...")
+eval_model(
+    model=model,
+    test_loader=test_loader,
+    device=device
+)
+print("Done Evaluating Model")

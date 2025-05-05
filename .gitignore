@@ -2,3 +2,4 @@ dataset/
 .venv/
 .env
 __pycache__/
+wandb/
