@@ -1,4 +1,5 @@
 import torch
+import torch.nn as nn
 from torch.utils.data import DataLoader
 import torchaudio.transforms as T
 from dataloader import SpeechCommandsDataset
@@ -7,17 +8,20 @@ from training import train_model
 from evaluating import eval_model
 from dotenv import load_dotenv
 import os
+import time
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 
 load_dotenv()
 dataset_path = os.getenv("DATASET_PATH")
 
 config = {
-    'num_epochs': 10,
-    'batch_size': 32,
-    'max_sample_per_class': 100,
+    'num_epochs': 50,
+    'batch_size': 64,
+    'max_sample_per_class': 1000,
     'only_classes': ["yes", "no", "on", "off"],
-    'sampling_rate': 8000,
+    'sampling_rate': 8000
 }
 
 using_wandb = True
@@ -95,14 +99,30 @@ train_model(
     model=model,
     train_loader=train_loader,
     val_loader=val_loader,
-    device=device
+    device=device,
+    num_epochs=config['num_epochs'],
+    
 )
 print("Done Training Model")
 
 print("Evaluating Model...")
-eval_model(
+_, _, class_report, conf_matrix = eval_model(
     model=model,
     test_loader=test_loader,
     device=device
 )
 print("Done Evaluating Model")
+
+os.makedirs("reports", exist_ok=True)
+timestamp = time.strftime("%Y%m%d-%H%M%S")
+os.makedirs(f"reports/{timestamp}", exist_ok=True)
+with open(f"reports/{timestamp}/class_report.txt", "w") as f:
+    f.write(class_report)
+plt.figure(figsize=(10, 8))
+sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Blues", xticklabels=test_loader.dataset.classes, yticklabels=test_loader.dataset.classes)
+plt.title("Confusion Matrix")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.tight_layout()
+plt.savefig(f"reports/{timestamp}/conf_matrix.png")
+plt.close()

@@ -28,13 +28,11 @@ class SpeechCommandsDataset(Dataset):
         self.samples = []
         self.classes = sorted([
             d for d in os.listdir(root_dir)
-            if os.path.isdir(os.path.join(root_dir, d))
+            if (os.path.isdir(os.path.join(root_dir, d) and only_classes is None) or (d in only_classes and only_classes is not None and os.path.isdir(os.path.join(root_dir, d))))
         ])
         self.class_to_idx = {cls_name: idx for idx, cls_name in enumerate(self.classes)}
 
         for cls in self.classes:
-            if only_classes is not None and cls not in only_classes:
-                continue
             cls_dir = os.path.join(root_dir, cls)
             sample_counter = 0
             for filename in os.listdir(cls_dir):
