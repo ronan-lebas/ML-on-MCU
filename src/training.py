@@ -18,7 +18,10 @@ def train_model(model, train_loader, **kwargs):
     optimizer = args['optimizer']
     val_loader = args['val_loader']    
     model.to(device)
-
+    if val_loader is not None:
+        best_val_accuracy = 0.0
+        best_model = None
+        best_epoch = 0
     for epoch in range(num_epochs):
         model.train()
         running_loss = 0.0
@@ -69,5 +72,12 @@ def train_model(model, train_loader, **kwargs):
                 'val_loss': val_loss,
                 'val_accuracy': val_accuracy
             })
+            if val_accuracy > best_val_accuracy:
+                best_val_accuracy = val_accuracy
+                best_model = model.state_dict().copy()
+                best_epoch = epoch + 1
             print(f'Epoch [{epoch+1}/{num_epochs}], Loss on validation set: {val_loss:.4f}, Accuracy on validation set: {100 * val_accuracy:.2f}%')
-        wandb.log(log_dict)    
+        wandb.log(log_dict)
+    if val_loader is not None:
+        model.load_state_dict(best_model)
+        print(f"Training complete, best model found at epoch {best_epoch} with validation accuracy: {100 * best_val_accuracy:.2f}%")

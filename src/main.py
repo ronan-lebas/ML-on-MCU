@@ -17,9 +17,9 @@ load_dotenv()
 dataset_path = os.getenv("DATASET_PATH")
 
 config = {
-    'num_epochs': 50,
+    'num_epochs': 1000,
     'batch_size': 64,
-    'max_sample_per_class': 1000,
+    'max_sample_per_class': -1,
     'only_classes': ["yes", "no", "on", "off"],
     'sampling_rate': 8000
 }
