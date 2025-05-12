@@ -4,3 +4,5 @@ dataset/
 __pycache__/
 wandb/
 reports/
+temp/
+stm_export
