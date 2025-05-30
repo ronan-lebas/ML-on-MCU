@@ -12,30 +12,12 @@ import time
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+from config import config
 
 load_dotenv()
 dataset_path = os.getenv("DATASET_PATH")
 
-config = {
-    'num_epochs': 20,
-    'batch_size': 128,
-    'max_sample_per_class': -1,
-    'only_classes': ["yes", "no", "on", "off"],
-    'sampling_rate': 8000,
-    'optimizer': 'SGD',
-    'lr': 0.001,
-    'momentum': 0.9,
-    'weight_decay': 0.0001,
-    'lr_scheduler': 'CosineAnnealing',
-    'n_mfcc': 40,
-    'melkwargs': {
-        "n_fft": 400,
-        "hop_length": 160,
-        "n_mels": 64
-    },
-}
-
-using_wandb = True
+using_wandb = config['use_wandb']
 if using_wandb:
     import wandb
     wandb.init(
@@ -140,8 +122,16 @@ plt.ylabel("Actual")
 plt.tight_layout()
 plt.savefig(f"reports/{timestamp}/conf_matrix.png")
 plt.close()
+with open(f"reports/{timestamp}/model_architecture.txt", "w") as f:
+    f.write(str(model))
 if using_wandb:
-    wandb.log({"conf_matrix": wandb.Image(f"reports/{timestamp}/conf_matrix.png")})
+    wandb.log(
+        {
+            "conf_matrix": wandb.Image(f"reports/{timestamp}/conf_matrix.png"),
+            "architecture": wandb.Html("<pre>" + str(model) + "</pre>"),
+            "class_report": wandb.Html("<pre>" + class_report + "</pre>")
+        }
+    )
     wandb.save(model_path)
     wandb.finish()
 print("Done Saving Model and Reports")
