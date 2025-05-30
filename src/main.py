@@ -17,11 +17,22 @@ load_dotenv()
 dataset_path = os.getenv("DATASET_PATH")
 
 config = {
-    'num_epochs': 1000,
-    'batch_size': 64,
+    'num_epochs': 20,
+    'batch_size': 128,
     'max_sample_per_class': -1,
     'only_classes': ["yes", "no", "on", "off"],
-    'sampling_rate': 8000
+    'sampling_rate': 8000,
+    'optimizer': 'SGD',
+    'lr': 0.001,
+    'momentum': 0.9,
+    'weight_decay': 0.0001,
+    'lr_scheduler': 'CosineAnnealing',
+    'n_mfcc': 40,
+    'melkwargs': {
+        "n_fft": 400,
+        "hop_length": 160,
+        "n_mels": 64
+    },
 }
 
 using_wandb = True
@@ -38,12 +49,8 @@ print(f"Using device: {device}")
 
 transform = T.MFCC(
     sample_rate=config['sampling_rate'],
-    n_mfcc=40,
-    melkwargs={
-        "n_fft": 400,
-        "hop_length": 160,
-        "n_mels": 64
-    }
+    n_mfcc=config['n_mfcc'],
+    melkwargs=config['melkwargs']
 )
 print("Loading Train dataset...")
 train_loader = DataLoader(
@@ -101,7 +108,11 @@ train_model(
     val_loader=val_loader,
     device=device,
     num_epochs=config['num_epochs'],
-    
+    optimizer=config['optimizer'],
+    lr=config['lr'],
+    momentum=config['momentum'],
+    weight_decay=config['weight_decay'],
+    lr_scheduler=config['lr_scheduler'],
 )
 print("Done Training Model")
 

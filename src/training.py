@@ -8,20 +8,45 @@ def train_model(model, train_loader, **kwargs):
         'num_epochs': 10,
         'device': 'cuda' if torch.cuda.is_available() else 'cpu',
         'criterion': nn.CrossEntropyLoss(),
-        'optimizer': torch.optim.Adam(model.parameters(), lr=0.001),
+        'optimizer': 'Adam',
         'val_loader': None,
+        'lr': 0.001,
+        'momentum': 0.9,
+        'weight_decay': 0.0001,
+        'lr_scheduler': None,
     }
     args = {**args, **kwargs}
     device = args['device']
     num_epochs = args['num_epochs']
     criterion = args['criterion']
     optimizer = args['optimizer']
-    val_loader = args['val_loader']    
+    val_loader = args['val_loader'] 
+    lr = args['lr']
+    momentum = args['momentum']
+    weight_decay = args['weight_decay']
+    lr_scheduler = args['lr_scheduler']
+    optimizer = torch.optim.SGD(
+        model.parameters(),
+        lr=lr,
+        momentum=momentum,
+        weight_decay=weight_decay
+    ) if optimizer == 'SGD' else torch.optim.Adam(
+        model.parameters(),
+        lr=lr,
+        weight_decay=weight_decay
+    )
+    lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+        optimizer,
+        T_max=num_epochs,
+        eta_min=0.0
+    ) if lr_scheduler == 'CosineAnnealing' else None
     model.to(device)
+    
     if val_loader is not None:
         best_val_accuracy = 0.0
         best_model = None
         best_epoch = 0
+
     for epoch in range(num_epochs):
         model.train()
         running_loss = 0.0
@@ -46,8 +71,11 @@ def train_model(model, train_loader, **kwargs):
         log_dict = {
             'epoch': epoch + 1,
             'train_loss': train_loss,
-            'train_accuracy': train_accuracy
+            'train_accuracy': train_accuracy,
+            'learning_rate': optimizer.param_groups[0]['lr']
         }
+        if lr_scheduler is not None:
+            lr_scheduler.step()
         print(f'Epoch [{epoch+1}/{num_epochs}], Loss on train set: {train_loss:.4f}, Accuracy on train set: {100 * train_accuracy:.2f}%')
         if val_loader is not None:
             model.eval()
