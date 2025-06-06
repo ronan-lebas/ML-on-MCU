@@ -1,7 +1,10 @@
 import torch
 import torch.nn as nn
 from tqdm import tqdm
-import wandb
+from config import config
+
+if config['use_wandb']:
+    import wandb
 
 def train_model(model, train_loader, **kwargs):
     args = {
@@ -105,7 +108,9 @@ def train_model(model, train_loader, **kwargs):
                 best_model = model.state_dict().copy()
                 best_epoch = epoch + 1
             print(f'Epoch [{epoch+1}/{num_epochs}], Loss on validation set: {val_loss:.4f}, Accuracy on validation set: {100 * val_accuracy:.2f}%')
-        wandb.log(log_dict)
+        if config['use_wandb']:
+            wandb.log(log_dict)
     if val_loader is not None:
         model.load_state_dict(best_model)
         print(f"Training complete, best model found at epoch {best_epoch} with validation accuracy: {100 * best_val_accuracy:.2f}%")
+    return model, log_dict
