@@ -20,9 +20,9 @@ class SpeechCommandsDataset(Dataset):
         self.max_duration = 1.0
 
         with open(os.path.join(root_dir, "testing_list.txt"), "r") as f:
-            test_samples = set(line.strip() for line in f)
+            test_samples = set(os.path.normpath(line.strip()) for line in f)
         with open(os.path.join(root_dir, "validation_list.txt"), "r") as f:
-            val_samples = set(line.strip() for line in f)
+            val_samples = set(os.path.normpath(line.strip()) for line in f)
 
         # List all .wav files and associated class labels
         self.samples = []
