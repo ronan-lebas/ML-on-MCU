@@ -45,7 +45,7 @@ def check_onnx(path):
     onnx.checker.check_model(onnx_model)
 
 
-def export_validation_csv(
+def export_csv(
     dataset,
     output_csv_path,
     num_samples
@@ -55,7 +55,7 @@ def export_validation_csv(
     input_list = []
     output_list = []
 
-    for i, (inputs, labels) in enumerate(tqdm(dataloader, total=num_samples, desc="Exporting CSV")):
+    for i, (inputs, labels) in enumerate(tqdm(dataloader, total=num_samples, desc="Exporting CSVs")):
         if i >= num_samples:
             break
 
@@ -66,8 +66,8 @@ def export_validation_csv(
         one_hot_label[labels.item()] = 1.0
         output_list.append(one_hot_label)
 
-    input_path = output_csv_path + "/validation_inputs.csv"
-    output_path = output_csv_path + "/validation_outputs.csv"
+    input_path = output_csv_path + "/inputs.csv"
+    output_path = output_csv_path + "/outputs.csv"
     
     with open(input_path, mode='w', newline='') as f:
         writer = csv.writer(f)
@@ -92,7 +92,6 @@ class DataReader(CalibrationDataReader):
         self.enum_data = []
         for i in range(min(self.num_samples, len(self.dataset))):
             x, _ = self.dataset[i]
-            # x: shape (1, 40, 51) → add batch dim
             x = x.unsqueeze(0).numpy().astype(np.float32)
             self.enum_data.append({"input": x})
         self.enum_data = iter(self.enum_data)
@@ -127,9 +126,18 @@ if __name__ == '__main__':
         melkwargs=config['melkwargs']
     )
     
-    dataset = SpeechCommandsDataset(
+    val_dataset = SpeechCommandsDataset(
                 dataset_path,
                 "VAL",
+                sampling_rate=config['sampling_rate'],
+                transform=transform,
+                max_sample_per_class=config['max_sample_per_class'],
+                only_classes=config['only_classes']
+            )
+    
+    test_dataset = SpeechCommandsDataset(
+                dataset_path,
+                "TEST",
                 sampling_rate=config['sampling_rate'],
                 transform=transform,
                 max_sample_per_class=config['max_sample_per_class'],
@@ -140,13 +148,13 @@ if __name__ == '__main__':
     check_onnx(onnx_path)
     print("ONNX model converted and checked successfully.")
     
-    export_validation_csv(
-        dataset=dataset,
+    quantize_onnx(onnx_path, quantized_path, val_dataset, quantization_type=QuantType.QInt8)
+    check_onnx(quantized_path)
+    print("ONNX model quantized and checked successfully.")
+    
+    export_csv(
+        dataset=test_dataset,
         output_csv_path=folder,
         num_samples=100
     )
-    print("Validation CSVs exported successfully.")
-    
-    quantize_onnx(onnx_path, quantized_path, dataset, quantization_type=QuantType.QInt8)
-    check_onnx(quantized_path)
-    print("ONNX model quantized and checked successfully.")
+    print("CSVs for on-device test exported successfully.")
