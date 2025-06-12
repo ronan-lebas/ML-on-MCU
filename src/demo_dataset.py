@@ -48,7 +48,7 @@ dataset = SpeechCommandsDataset(
         only_classes=config['only_classes']
     )
 
-model_path = os.path.normpath("reports/20250601-154841/model_quantized.onnx")
+model_path = os.path.normpath("reports/20250611-120913/model_quantized.onnx")
 
 model = onnx.load(model_path)
 input_tensor = model.graph.input[0]
