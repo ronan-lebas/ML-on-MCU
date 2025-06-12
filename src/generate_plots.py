@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-folder_path = "reports/20250601-154841"
+folder_path = "reports/20250611-120913"
 path = folder_path + "/class_report.txt"
 
 with open(path, 'r') as f:
@@ -52,6 +52,14 @@ models = [
         "ram": 81,
         "macc": 82550824,
     },
+    {
+        "accuracy": 0.93,
+        "latency": 1.3,
+        "params": 67336,
+        "flash": 102,
+        "ram": 78,
+        "macc": 47134696,
+    }
 ]
 
 for key1 in models[0].keys():
@@ -78,3 +86,55 @@ for key1 in models[0].keys():
         plt.title(f'{key2.capitalize()} vs {key1.capitalize()}')
         plt.tight_layout()
         plt.savefig(folder_path + f"/{key2}_vs_{key1}.png")
+        plt.close()
+
+
+nodes = [
+    (0, 'Conv2D', 49.263, 3.8, 3.8),
+    (1, 'Conv2dPool', 493.912, 38.2, 42.0), 
+    (2, 'Conv2D', 229.235, 17.7, 59.7), 
+    (3, 'Conv2D', 517.350, 40.0, 99.7), 
+    (4, 'Pool', 3.405, 0.3, 100.0), 
+    (5, 'Dense', 0.091, 0.0, 100.0), 
+    (6, 'Dense', 0.035, 0.0, 100.0)
+]
+
+type_to_color = {
+    "Conv2D": "#1f77b4",
+    "Conv2dPool": "#2ca02c",
+    "Pool": "#ff7f0e",
+    "Dense": "#d62728",
+}
+
+labels = [f"{n[1]} ({n[0]})" for n in nodes]
+durations = [n[2] for n in nodes]
+layer_types = [n[1] for n in nodes]
+colors = [type_to_color[t] for t in layer_types]
+
+y = np.arange(len(labels))
+
+fig, ax1 = plt.subplots(figsize=(12, 6))
+
+bars = ax1.barh(y, durations, color=colors, edgecolor='black')
+ax1.set_xlabel("Inference Time (ms)", fontsize=12)
+ax1.set_yticks(y)
+ax1.set_yticklabels(labels, fontsize=10)
+ax1.invert_yaxis()
+ax1.grid(axis='x', linestyle='--', alpha=0.6)
+
+for i, bar in enumerate(bars):
+    width = bar.get_width()
+    ax1.text(width + 5, bar.get_y() + bar.get_height()/2,
+             f"{durations[i]:.1f} ms\n({nodes[i][3]:.1f}%)", va='center', fontsize=9)
+
+legend_elements = [
+    plt.Line2D([0], [0], color=color, lw=8, label=lt)
+    for lt, color in type_to_color.items()
+]
+ax1.legend(handles=legend_elements, loc='lower right', fontsize=10)
+
+# Layout
+plt.title("Inference Time per Layer", fontsize=14)
+plt.tight_layout()
+plt.savefig(folder_path + "/inference_time_per_layer.png")
+plt.close()
