@@ -20,7 +20,7 @@ dataset_path = os.getenv("DATASET_PATH")
 
 
 # === Config ===
-model_path = "reports/20250601-154841/model_quantized.onnx"
+model_path = "reports/20250611-120913/model_quantized.onnx"
 port = 'COM4'
 baudrate = 115200
 transform = T.MFCC(
