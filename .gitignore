@@ -3,7 +3,7 @@ dataset/
 .env
 __pycache__/
 wandb/
-reports/
 temp/
 stm_export
 videos/
+.vscode/

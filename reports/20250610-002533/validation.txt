@@ -1,0 +1,265 @@
+
+
+Starting AI validation on target with custom dataset : C:\Users\ronan\Documents\ETH\S2\Machine Learning on Microcontrollers\project\reports\20250609-185330\inputs.csv... 
+C:/Users/ronan/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/10.0.0/Utilities/windows/stedgeai.exe validate --target stm32l4 --name network -m C:/Users/ronan/Documents/ETH/S2/Machine Learning on Microcontrollers/project/reports/20250610-002533/model_quantized.onnx --compression none --verbosity 1 --workspace C:/Users/ronan/AppData/Local/Temp/mxAI_workspace1676624035029912580851755577853289 --output C:/Users/ronan/.stm32cubemx/network_output --valoutput C:/Users/ronan/Documents/ETH/S2/Machine Learning on Microcontrollers/project/reports/20250609-185330/outputs.csv --mode target --valinput C:/Users/ronan/Documents/ETH/S2/Machine Learning on Microcontrollers/project/reports/20250609-185330/inputs.csv --desc serial:115200 
+ST Edge AI Core v2.0.0-20049 
+Setting validation data... 
+ loading file: C:\Users\ronan\Documents\ETH\S2\Machine Learning on Microcontrollers\project\reports\20250609-185330\inputs.csv 
+   samples are reshaped: (100, 2040) -> (100, 40, 51, 1) 
+ loading file: C:\Users\ronan\Documents\ETH\S2\Machine Learning on Microcontrollers\project\reports\20250609-185330\outputs.csv 
+   samples are reshaped: (100, 8) -> (100, 1, 1, 8) 
+   I[1]: (100, 40, 51, 1)/float32, min/max=[-602.234680, 196.972946], mean/std=[-6.763055, 46.227463] 
+    c/I[1] conversion [Q(3.13133597,63)]-> (100, 40, 51, 1)/int8, min/max=[-128, 126], mean/std=[60.839975, 14.764641] 
+    m/I[1] no modification. 
+   O[1]: (100, 1, 1, 8)/float32, min/max=[0.000000, 1.000000], mean/std=[0.125000, 0.330719] 
+Creating c (debug) info json file C:\Users\ronan\AppData\Local\Temp\mxAI_workspace1676624035029912580851755577853289\network_c_info.json 
+  
+ Exec/report summary (validate) 
+ --------------------------------------------------------------------------------------------------------------------------------------------------- 
+ model file         :   C:\Users\ronan\Documents\ETH\S2\Machine Learning on Microcontrollers\project\reports\20250610-002533\model_quantized.onnx    
+ type               :   onnx                                                                                                                         
+ c_name             :   network                                                                                                                      
+ compression        :   none                                                                                                                         
+ options            :   allocate-inputs, allocate-outputs                                                                                            
+ optimization       :   balanced                                                                                                                     
+ target/series      :   stm32l4                                                                                                                      
+ workspace dir      :   C:\Users\ronan\AppData\Local\Temp\mxAI_workspace1676624035029912580851755577853289                                           
+ output dir         :   C:\Users\ronan\.stm32cubemx\network_output                                                                                   
+ vinput files       :   C:\Users\ronan\Documents\ETH\S2\Machine Learning on Microcontrollers\project\reports\20250609-185330\inputs.csv              
+ voutput files      :   C:\Users\ronan\Documents\ETH\S2\Machine Learning on Microcontrollers\project\reports\20250609-185330\outputs.csv             
+ model_fmt          :   ss/sa per tensor                                                                                                             
+ model_name         :   model_quantized                                                                                                              
+ model_hash         :   0x9865468fc05d4996b97da4f37ebd5432                                                                                           
+ params #           :   592,200 items (2.26 MiB)                                                                                                     
+ --------------------------------------------------------------------------------------------------------------------------------------------------- 
+ input 1/1          :   'input', int8(1x40x51x1), 1.99 KBytes, QLinear(3.131335974,63,int8), activations                                             
+ output 1/1         :   'output_QuantizeLinear_Input', int8(1x8), 8 Bytes, QLinear(0.204637080,-7,int8), activations                                 
+ macc               :   82,550,824                                                                                                                   
+ weights (ro)       :   594,624 B (580.69 KiB) (1 segment) / -1,774,176(-74.9%) vs float model                                                       
+ activations (rw)   :   76,608 B (74.81 KiB) (1 segment) *                                                                                           
+ ram (total)        :   76,608 B (74.81 KiB) = 76,608 + 0 + 0                                                                                        
+ --------------------------------------------------------------------------------------------------------------------------------------------------- 
+ (*) 'input'/'output' buffers can be used from the activations buffer 
+Running the ONNX model... 
+Running the ST.AI c-model (AI RUNNER)...(name=network, mode=TARGET) 
+ Proto-buffer driver v2.0 (msg v3.1) (Serial driver v1.0 - COM4:115200) ['network'] 
+  Summary 'network' - ['network'] 
+  ------------------------------------------------------------------------------------------------- 
+  I[1/1] 'input_1'    :   int8[1,40,51,1], 2040 Bytes, QLinear(3.131335974,63,int8), activations 
+  O[1/1] 'output_1'   :   int8[1,1,1,8], 8 Bytes, QLinear(0.204637080,-7,int8), activations 
+  n_nodes             :   12 
+  activations         :   76608 
+  weights             :   594624 
+  macc                :   82550824 
+  hash                :   0x9865468fc05d4996b97da4f37ebd5432 
+  compile_datetime    :   Jun 10 2025 15:08:24 
+  ------------------------------------------------------------------------------------------------- 
+  protocol            :   Proto-buffer driver v2.0 (msg v3.1) (Serial driver v1.0 - COM4:115200) 
+  tools               :   ST.AI (legacy api) v2.0.0 
+  runtime lib         :   v10.0.0-fd22b7f9 compiled with GCC 11.3.1 (GCC) 
+  capabilities        :   IO_ONLY, PER_LAYER, PER_LAYER_WITH_DATA 
+  device.desc         :   stm32 family - 0x415 - STM32L4x6xx @80/80MHz 
+  device.attrs        :   fpu,art_lat=4,art_icache,art_dcache 
+  ------------------------------------------------------------------------------------------------- 
+STAI.IO:   0%|          | 0/100 [00:00<?, ?it/s] 
+STAI.IO:   2%|2         | 2/100 [00:03<02:29,  1.53s/it] 
+STAI.IO:   3%|3         | 3/100 [00:06<03:29,  2.16s/it] 
+STAI.IO:   4%|4         | 4/100 [00:09<03:59,  2.50s/it] 
+STAI.IO:   6%|6         | 6/100 [00:15<04:24,  2.81s/it] 
+STAI.IO:   7%|7         | 7/100 [00:18<04:28,  2.89s/it] 
+STAI.IO:   8%|8         | 8/100 [00:21<04:30,  2.94s/it] 
+STAI.IO:   9%|9         | 9/100 [00:24<04:30,  2.98s/it] 
+STAI.IO:  10%|#         | 10/100 [00:27<04:30,  3.00s/it] 
+STAI.IO:  11%|#1        | 11/100 [00:30<04:28,  3.02s/it] 
+STAI.IO:  12%|#2        | 12/100 [00:33<04:26,  3.03s/it] 
+STAI.IO:  13%|#3        | 13/100 [00:36<04:24,  3.04s/it] 
+STAI.IO:  14%|#4        | 14/100 [00:39<04:21,  3.04s/it] 
+STAI.IO:  15%|#5        | 15/100 [00:42<04:18,  3.05s/it] 
+STAI.IO:  16%|#6        | 16/100 [00:45<04:16,  3.05s/it] 
+STAI.IO:  17%|#7        | 17/100 [00:48<04:13,  3.05s/it] 
+STAI.IO:  18%|#8        | 18/100 [00:51<04:10,  3.05s/it] 
+STAI.IO:  19%|#9        | 19/100 [00:54<04:07,  3.05s/it] 
+STAI.IO:  20%|##        | 20/100 [00:58<04:04,  3.05s/it] 
+STAI.IO:  21%|##1       | 21/100 [01:01<04:01,  3.05s/it] 
+STAI.IO:  22%|##2       | 22/100 [01:04<03:58,  3.05s/it] 
+STAI.IO:  23%|##3       | 23/100 [01:07<03:55,  3.05s/it] 
+STAI.IO:  24%|##4       | 24/100 [01:10<03:52,  3.05s/it] 
+STAI.IO:  25%|##5       | 25/100 [01:13<03:49,  3.05s/it] 
+STAI.IO:  26%|##6       | 26/100 [01:16<03:46,  3.05s/it] 
+STAI.IO:  27%|##7       | 27/100 [01:19<03:42,  3.05s/it] 
+STAI.IO:  28%|##8       | 28/100 [01:22<03:39,  3.05s/it] 
+STAI.IO:  29%|##9       | 29/100 [01:25<03:36,  3.05s/it] 
+STAI.IO:  30%|###       | 30/100 [01:28<03:33,  3.05s/it] 
+STAI.IO:  31%|###1      | 31/100 [01:31<03:30,  3.05s/it] 
+STAI.IO:  32%|###2      | 32/100 [01:34<03:27,  3.05s/it] 
+STAI.IO:  33%|###3      | 33/100 [01:37<03:24,  3.05s/it] 
+STAI.IO:  34%|###4      | 34/100 [01:40<03:21,  3.06s/it] 
+STAI.IO:  35%|###5      | 35/100 [01:43<03:18,  3.05s/it] 
+STAI.IO:  36%|###6      | 36/100 [01:46<03:15,  3.05s/it] 
+STAI.IO:  37%|###7      | 37/100 [01:49<03:12,  3.05s/it] 
+STAI.IO:  38%|###8      | 38/100 [01:53<03:09,  3.05s/it] 
+STAI.IO:  39%|###9      | 39/100 [01:56<03:06,  3.05s/it] 
+STAI.IO:  40%|####      | 40/100 [01:59<03:03,  3.05s/it] 
+STAI.IO:  41%|####1     | 41/100 [02:02<03:00,  3.05s/it] 
+STAI.IO:  42%|####2     | 42/100 [02:05<02:57,  3.05s/it] 
+STAI.IO:  43%|####3     | 43/100 [02:08<02:54,  3.05s/it] 
+STAI.IO:  44%|####4     | 44/100 [02:11<02:50,  3.05s/it] 
+STAI.IO:  45%|####5     | 45/100 [02:14<02:47,  3.05s/it] 
+STAI.IO:  46%|####6     | 46/100 [02:17<02:44,  3.05s/it] 
+STAI.IO:  47%|####6     | 47/100 [02:20<02:41,  3.05s/it] 
+STAI.IO:  48%|####8     | 48/100 [02:23<02:38,  3.05s/it] 
+STAI.IO:  49%|####9     | 49/100 [02:26<02:35,  3.05s/it] 
+STAI.IO:  50%|#####     | 50/100 [02:29<02:32,  3.05s/it] 
+STAI.IO:  51%|#####1    | 51/100 [02:32<02:29,  3.05s/it] 
+STAI.IO:  52%|#####2    | 52/100 [02:35<02:26,  3.05s/it] 
+STAI.IO:  53%|#####3    | 53/100 [02:38<02:23,  3.05s/it] 
+STAI.IO:  54%|#####4    | 54/100 [02:41<02:20,  3.05s/it] 
+STAI.IO:  55%|#####5    | 55/100 [02:44<02:17,  3.05s/it] 
+STAI.IO:  56%|#####6    | 56/100 [02:47<02:14,  3.05s/it] 
+STAI.IO:  57%|#####6    | 57/100 [02:51<02:11,  3.05s/it] 
+STAI.IO:  58%|#####8    | 58/100 [02:54<02:08,  3.05s/it] 
+STAI.IO:  59%|#####8    | 59/100 [02:57<02:05,  3.05s/it] 
+STAI.IO:  60%|######    | 60/100 [03:00<02:02,  3.05s/it] 
+STAI.IO:  61%|######1   | 61/100 [03:03<01:59,  3.05s/it] 
+STAI.IO:  62%|######2   | 62/100 [03:06<01:56,  3.05s/it] 
+STAI.IO:  63%|######3   | 63/100 [03:09<01:53,  3.05s/it] 
+STAI.IO:  64%|######4   | 64/100 [03:12<01:49,  3.05s/it] 
+STAI.IO:  65%|######5   | 65/100 [03:15<01:46,  3.05s/it] 
+STAI.IO:  66%|######6   | 66/100 [03:18<01:43,  3.05s/it] 
+STAI.IO:  67%|######7   | 67/100 [03:21<01:40,  3.05s/it] 
+STAI.IO:  68%|######8   | 68/100 [03:24<01:37,  3.05s/it] 
+STAI.IO:  69%|######9   | 69/100 [03:27<01:34,  3.05s/it] 
+STAI.IO:  70%|#######   | 70/100 [03:30<01:31,  3.05s/it] 
+STAI.IO:  71%|#######1  | 71/100 [03:33<01:28,  3.05s/it] 
+STAI.IO:  72%|#######2  | 72/100 [03:36<01:25,  3.05s/it] 
+STAI.IO:  73%|#######3  | 73/100 [03:39<01:22,  3.05s/it] 
+STAI.IO:  74%|#######4  | 74/100 [03:42<01:19,  3.05s/it] 
+STAI.IO:  75%|#######5  | 75/100 [03:45<01:16,  3.05s/it] 
+STAI.IO:  76%|#######6  | 76/100 [03:49<01:13,  3.05s/it] 
+STAI.IO:  77%|#######7  | 77/100 [03:52<01:10,  3.05s/it] 
+STAI.IO:  78%|#######8  | 78/100 [03:55<01:07,  3.05s/it] 
+STAI.IO:  79%|#######9  | 79/100 [03:58<01:04,  3.05s/it] 
+STAI.IO:  80%|########  | 80/100 [04:01<01:01,  3.05s/it] 
+STAI.IO:  81%|########1 | 81/100 [04:04<00:58,  3.05s/it] 
+STAI.IO:  82%|########2 | 82/100 [04:07<00:54,  3.05s/it] 
+STAI.IO:  83%|########2 | 83/100 [04:10<00:51,  3.05s/it] 
+STAI.IO:  84%|########4 | 84/100 [04:13<00:48,  3.05s/it] 
+STAI.IO:  85%|########5 | 85/100 [04:16<00:45,  3.05s/it] 
+STAI.IO:  86%|########6 | 86/100 [04:19<00:42,  3.05s/it] 
+STAI.IO:  87%|########7 | 87/100 [04:22<00:39,  3.05s/it] 
+STAI.IO:  88%|########8 | 88/100 [04:25<00:36,  3.05s/it] 
+STAI.IO:  89%|########9 | 89/100 [04:28<00:33,  3.05s/it] 
+STAI.IO:  90%|######### | 90/100 [04:31<00:30,  3.05s/it] 
+STAI.IO:  91%|#########1| 91/100 [04:34<00:27,  3.05s/it] 
+STAI.IO:  92%|#########2| 92/100 [04:37<00:24,  3.05s/it] 
+STAI.IO:  93%|#########3| 93/100 [04:40<00:21,  3.05s/it] 
+STAI.IO:  94%|#########3| 94/100 [04:44<00:18,  3.05s/it] 
+STAI.IO:  95%|#########5| 95/100 [04:47<00:15,  3.05s/it] 
+STAI.IO:  96%|#########6| 96/100 [04:50<00:12,  3.05s/it] 
+STAI.IO:  97%|#########7| 97/100 [04:53<00:09,  3.05s/it] 
+STAI.IO:  98%|#########8| 98/100 [04:56<00:06,  3.05s/it] 
+STAI.IO:  99%|#########9| 99/100 [04:59<00:03,  3.05s/it] 
+  ST.AI Profiling results v2.0 - "network" 
+  ------------------------------------------------------------------------ 
+  nb sample(s)      :   100 
+  duration          :   2596.481 ms by sample (2596.475/2596.487/0.002) 
+  macc              :   82550824 
+  cycles/MACC       :   2.52 
+  CPU cycles        :   [207,718,484] 
+  used stack/heap   :   not monitored/0 bytes 
+  ------------------------------------------------------------------------ 
+   Inference time per node 
+   ------------------------------------------------------------------------------------------------ 
+   c_id    m_id   type                   dur (ms)       %    cumul  CPU cycles        name 
+   ------------------------------------------------------------------------------------------------ 
+   0       28     Conv2D (0x103)           49.263    1.9%     1.9%  [   3,941,079 ]   ai_node_0 
+   1       34     Conv2dPool (0x109)      493.912   19.0%    20.9%  [  39,512,950 ]   ai_node_1 
+   2       37     Conv2D (0x103)          229.236    8.8%    29.7%  [  18,338,842 ]   ai_node_2 
+   3       43     Conv2dPool (0x109)      558.319   21.5%    51.3%  [  44,665,536 ]   ai_node_3 
+   4       46     Conv2D (0x103)          253.221    9.8%    61.0%  [  20,257,665 ]   ai_node_4 
+   5       52     Conv2dPool (0x109)      682.021   26.3%    87.3%  [  54,561,693 ]   ai_node_5 
+   6       55     Conv2D (0x103)          164.770    6.3%    93.6%  [  13,181,587 ]   ai_node_6 
+   7       58     Conv2D (0x103)          164.770    6.3%   100.0%  [  13,181,586 ]   ai_node_7 
+   8       61     Pool (0x10b)              0.565    0.0%   100.0%  [      45,226 ]   ai_node_8 
+   9       71     Dense (0x104)             0.278    0.0%   100.0%  [      22,213 ]   ai_node_9 
+   10      74     Dense (0x104)             0.091    0.0%   100.0%  [       7,282 ]   ai_node_10 
+   11      77     Dense (0x104)             0.035    0.0%   100.0%  [       2,825 ]   ai_node_11 
+   ------------------------------------------------------------------------------------------------ 
+   n/a     n/a    Inter-nodal               0.000    0.0%   100.0%                    n/a 
+   ------------------------------------------------------------------------------------------------ 
+   total                                 2596.481                   [ 207,718,484 ] 
+   ------------------------------------------------------------------------------------------------ 
+   Statistic per tensor 
+   ------------------------------------------------------------------------------- 
+   tensor   #     type[shape]:size        min   max     mean      std  name 
+   ------------------------------------------------------------------------------- 
+   I.0      100   i8[1,40,51,1]:2040     -128   126   60.840   14.765  input_1 
+   O.0      100   i8[1,1,1,8]:8          -123   112   -5.628   51.048  output_1 
+   ------------------------------------------------------------------------------- 
+Saving validation data... 
+ output directory: C:\Users\ronan\.stm32cubemx\network_output 
+ creating C:\Users\ronan\.stm32cubemx\network_output\network_val_io.npz 
+ m_outputs_1: (100, 1, 1, 8)/float64, min/max=[-23.737902, 24.351812], mean/std=[0.281120, 10.446711], output_QuantizeLinear_Input 
+ c_outputs_1: (100, 1, 1, 8)/int8, min/max=[-123, 112], mean/std=[-5.627500, 51.047808], scale=0.204637080 zp=-7, output_QuantizeLinear_Input 
+Computing the metrics... 
+ Accuracy report #1 for the generated TARGET C-model 
+ ---------------------------------------------------------------------------------------------------- 
+ notes: - data type is different: r/float32 instead p/int8 
+        - p/int8 data are dequantized with s=0.2046370804309845 zp=-7 
+        - computed against the provided ground truth values 
+        - 100 samples (8 items per sample) 
+  acc=92.00% rmse=10.261791229 mae=8.668708801 l2r=0.981984973 mean=-0.155864 std=10.267025 nse=-960.578206 cos=0.544597 
+  Confusion matrix (axis=-1) - 8 classes (100 samples) 
+  ------------------------------------------------ 
+  C0       10    1    1    .    1    .    .    . 
+  C1        .   14    1    .    1    .    .    . 
+  C2        1    .   13    .    .    .    .    1 
+  C3        .    .    .    8    .    .    .    . 
+  C4        .    1    .    .   10    .    .    . 
+  C5        .    .    .    .    .   10    .    . 
+  C6        .    .    .    .    .    .   12    . 
+  C7        .    .    .    .    .    .    .   15 
+ Accuracy report #1 for the reference model 
+ ---------------------------------------------------------------------------------------------------- 
+ notes: - data type is different: r/float32 instead p/float64 
+        - p/float64 data are converted to np.float32 
+        - computed against the provided ground truth values 
+        - 100 samples (8 items per sample) 
+  acc=92.00% rmse=10.262242317 mae=8.669476509 l2r=0.981986463 mean=-0.156120 std=10.267473 nse=-960.662782 cos=0.544574 
+  Confusion matrix (axis=-1) - 8 classes (100 samples) 
+  ------------------------------------------------ 
+  C0       10    1    1    .    1    .    .    . 
+  C1        .   14    1    .    1    .    .    . 
+  C2        1    .   13    .    .    .    .    1 
+  C3        .    .    .    8    .    .    .    . 
+  C4        .    1    .    .   10    .    .    . 
+  C5        .    .    .    .    .   10    .    . 
+  C6        .    .    .    .    .    .   12    . 
+  C7        .    .    .    .    .    .    .   15 
+ Cross accuracy report #1 (reference vs C-model) 
+ ---------------------------------------------------------------------------------------------------- 
+ notes: - data type is different: r/float64 instead p/int8 
+        - p/int8 data are dequantized with s=0.2046370804309845 zp=-7 
+        - ACC metric is not computed ("--classifier" option can be used to force it) 
+        - the output of the reference model is used as ground truth/reference value 
+        - 100 samples (8 items per sample) 
+  acc=n.a. rmse=0.012531401 mae=0.000767388 l2r=0.001199171 mean=0.000256 std=0.012537 nse=0.999999 cos=0.999999 
+ Evaluation report (summary) 
+ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+ Output              acc      rmse           mae           l2r           mean        std         nse           cos        tensor 
+ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+ TARGET c-model #1   92.00%   10.261791229   8.668708801   0.981984973   -0.155864   10.267025   -960.578206   0.544597   'output_QuantizeLinear_Input', 100 x int8(1x8), m_id=[77] 
+ original model #1   92.00%   10.262242317   8.669476509   0.981986463   -0.156120   10.267473   -960.662782   0.544574   'output_QuantizeLinear_Input', 100 x int8(1x8), m_id=[77] 
+ X-cross #1          n.a.     0.012531401    0.000767388   0.001199171   0.000256    0.012537    0.999999      0.999999   'output_QuantizeLinear_Input', 100 x int8(1x8), m_id=[77] 
+ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+  acc  : Accuracy (class, axis=-1) 
+  rmse : Root Mean Squared Error 
+  mae  : Mean Absolute Error 
+  l2r  : L2 relative error 
+  mean : Mean error 
+  std  : Standard deviation error 
+  nse  : Nash-Sutcliffe efficiency criteria, bigger is better, best=1, range=(-inf, 1] 
+  cos  : COsine Similarity, bigger is better, best=1, range=(0, 1] 
+Creating txt report file C:\Users\ronan\.stm32cubemx\network_output\network_validate_report.txt 
+elapsed time (validate): 313.726s 
+Validation ended

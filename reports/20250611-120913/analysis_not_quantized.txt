@@ -1,0 +1,159 @@
+
+
+Analyzing model 
+C:/Users/ronan/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/10.0.0/Utilities/windows/stedgeai.exe analyze --target stm32l4 --name network -m C:/Users/ronan/Documents/ETH/S2/Machine Learning on Microcontrollers/project/reports/20250611-120913/model.onnx --compression none --verbosity 1 --workspace C:/Users/ronan/AppData/Local/Temp/mxAI_workspace4916095838010012703686954241778034 --output C:/Users/ronan/.stm32cubemx/network_output 
+ST Edge AI Core v2.0.0-20049 
+Creating c (debug) info json file C:\Users\ronan\AppData\Local\Temp\mxAI_workspace4916095838010012703686954241778034\network_c_info.json 
+  
+ Exec/report summary (analyze) 
+ ----------------------------------------------------------------------------------------------------------------------------------------- 
+ model file         :   C:\Users\ronan\Documents\ETH\S2\Machine Learning on Microcontrollers\project\reports\20250611-120913\model.onnx    
+ type               :   onnx                                                                                                               
+ c_name             :   network                                                                                                            
+ compression        :   none                                                                                                               
+ options            :   allocate-inputs, allocate-outputs                                                                                  
+ optimization       :   balanced                                                                                                           
+ target/series      :   stm32l4                                                                                                            
+ workspace dir      :   C:\Users\ronan\AppData\Local\Temp\mxAI_workspace4916095838010012703686954241778034                                 
+ output dir         :   C:\Users\ronan\.stm32cubemx\network_output                                                                         
+ model_fmt          :   float                                                                                                              
+ model_name         :   model                                                                                                              
+ model_hash         :   0x8539dbdfb703acc59c687f3797725665                                                                                 
+ params #           :   67,336 items (263.03 KiB)                                                                                          
+ ----------------------------------------------------------------------------------------------------------------------------------------- 
+ input 1/1          :   'input', f32(1x40x51x1), 7.97 KBytes, activations                                                                  
+ output 1/1         :   'output', f32(1x8), 32 Bytes, activations                                                                          
+ macc               :   47,329,288                                                                                                         
+ weights (ro)       :   269,344 B (263.03 KiB) (1 segment)                                                                                 
+ activations (rw)   :   281,984 B (275.38 KiB) (1 segment) *                                                                               
+ ram (total)        :   281,984 B (275.38 KiB) = 281,984 + 0 + 0                                                                           
+ ----------------------------------------------------------------------------------------------------------------------------------------- 
+ (*) 'input'/'output' buffers can be used from the activations buffer 
+Computing AI RT data/code size (target=stm32l4).. 
+ Model name - model 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ m_id   layer (original)                                     oshape                 param/size               macc                     connected to 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 19     fc1_weight (Gemm)                                    [b:32,c:64]            2,048/8,192 
+        fc1_bias (Gemm)                                      [b:32]                 32/128 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 21     fc2_weight (Gemm)                                    [b:8,c:32]             256/1,024 
+        fc2_bias (Gemm)                                      [b:8]                  8/32 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 0      input ()                                             [b:1,h:40,w:51,c:1] 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 1      _conv1_Conv_output_0 (Conv)                          [b:1,h:40,w:51,c:32]   320/1,280             587,552                            input 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 2      _Relu_output_0 (Relu)                                [b:1,h:40,w:51,c:32]                          65,280             _conv1_Conv_output_0 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 3      _conv2_Conv_output_0 (Conv)                          [b:1,h:40,w:51,c:32]   9,248/36,992       18,800,672                   _Relu_output_0 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 4      _Relu_1_output_0 (Relu)                              [b:1,h:40,w:51,c:32]                          65,280             _conv2_Conv_output_0 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 5      _pool1_MaxPool_output_0 (MaxPool)                    [b:1,h:20,w:25,c:32]                          64,000                 _Relu_1_output_0 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 6      _conv3_Conv_output_0 (Conv)                          [b:1,h:20,w:25,c:64]   18,496/73,984       9,216,064          _pool1_MaxPool_output_0 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 7      _Relu_2_output_0 (Relu)                              [b:1,h:20,w:25,c:64]                          32,000             _conv3_Conv_output_0 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 8      _conv4_Conv_output_0 (Conv)                          [b:1,h:20,w:25,c:64]   36,928/147,712     18,432,064                 _Relu_2_output_0 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 9      _Relu_3_output_0 (Relu)                              [b:1,h:20,w:25,c:64]                          32,000             _conv4_Conv_output_0 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 10     _pool2_GlobalAvera..l_output_0 (GlobalAveragePool)   [b:1,h:1,w:1,c:64]                            32,000                 _Relu_3_output_0 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 18     _Reshape_output_0 (Reshape)                          [b:1,c:64]                                             _pool2_GlobalAvera..l_output_0 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 19     _fc1_Gemm_output_0 (Gemm)                            [b:1,c:32]                                     2,080                _Reshape_output_0 
+                                                                                                                                        fc1_weight 
+                                                                                                                                          fc1_bias 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 20     _Relu_4_output_0 (Relu)                              [b:1,c:32]                                        32               _fc1_Gemm_output_0 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ 21     output (Gemm)                                        [b:1,c:8]                                        264                 _Relu_4_output_0 
+                                                                                                                                        fc2_weight 
+                                                                                                                                          fc2_bias 
+ ------ ---------------------------------------------------- ---------------------- ---------------- ------------ -------------------------------- 
+ model: macc=47,329,288 weights=269,344 activations=-- io=-- 
+ Number of operations per c-layer 
+ ------- ------ --------------------------------------- ------------ -------------- 
+ c_id    m_id   name (type)                                      #op           type 
+ ------- ------ --------------------------------------- ------------ -------------- 
+ 0       1      _conv1_Conv_output_0 (Conv2D)                587,552   smul_f32_f32 
+ 1       2      _Relu_output_0 (Nonlinearity)                 65,280     op_f32_f32 
+ 2       5      _conv2_Conv_output_0 (Conv2D)             18,929,952   smul_f32_f32 
+ 3       6      _conv3_Conv_output_0 (Conv2D)              9,216,064   smul_f32_f32 
+ 4       7      _Relu_2_output_0 (Nonlinearity)               32,000     op_f32_f32 
+ 5       8      _conv4_Conv_output_0 (Conv2D)             18,432,064   smul_f32_f32 
+ 6       9      _Relu_3_output_0 (Nonlinearity)               32,000     op_f32_f32 
+ 7       10     _pool2_GlobalAvera..l_output_0 (Pool)         32,000   smul_f32_f32 
+ 8       19     _fc1_Gemm_output_0 (Dense)                     2,080   smul_f32_f32 
+ 9       20     _Relu_4_output_0 (Nonlinearity)                   32     op_f32_f32 
+ 10      21     output (Dense)                                   264   smul_f32_f32 
+ ------- ------ --------------------------------------- ------------ -------------- 
+ total                                                    47,329,288 
+ Number of operation types 
+ ---------------- ------------ ----------- 
+ operation type              #           % 
+ ---------------- ------------ ----------- 
+ smul_f32_f32       47,199,976       99.7% 
+ op_f32_f32            129,312        0.3% 
+ Complexity report (model) 
+ ------ ----------------------------------- ------------------------- ------------------------- ------ 
+ m_id   name                                c_macc                    c_rom                     c_id 
+ ------ ----------------------------------- ------------------------- ------------------------- ------ 
+ 19     fc1_weight                          |                  0.0%   |                  3.1%   [8] 
+ 21     fc2_weight                          |                  0.0%   |                  0.4%   [10] 
+ 1      _conv1_Conv_output_0                |                  1.2%   |                  0.5%   [0] 
+ 2      _Relu_output_0                      |                  0.1%   |                  0.0%   [1] 
+ 5      _pool1_MaxPool_output_0             ||||||||||||||||  40.0%   ||||              13.7%   [2] 
+ 6      _conv3_Conv_output_0                ||||||||          19.5%   ||||||||          27.5%   [3] 
+ 7      _Relu_2_output_0                    |                  0.1%   |                  0.0%   [4] 
+ 8      _conv4_Conv_output_0                |||||||||||||||   38.9%   ||||||||||||||||  54.8%   [5] 
+ 9      _Relu_3_output_0                    |                  0.1%   |                  0.0%   [6] 
+ 10     _pool2_GlobalAveragePool_output_0   |                  0.1%   |                  0.0%   [7] 
+ 20     _Relu_4_output_0                    |                  0.0%   |                  0.0%   [9] 
+ ------ ----------------------------------- ------------------------- ------------------------- ------ 
+ macc=47,329,288 weights=269,344 act=281,984 ram_io=0 
+ Requested memory size by section - "stm32l4" target 
+ ------------------------------ -------- --------- ------- --------- 
+ module                             text    rodata    data       bss 
+ ------------------------------ -------- --------- ------- --------- 
+ NetworkRuntime1000_CM4_GCC.a     13,188         0       0         0 
+ network.o                           832        88   3,740       192 
+ network_data.o                       48        16      88         0 
+ lib (toolchain)*                      0         0       0         0 
+ ------------------------------ -------- --------- ------- --------- 
+ RT total**                       14,068       104   3,828       192 
+ ------------------------------ -------- --------- ------- --------- 
+ weights                               0   269,344       0         0 
+ activations                           0         0       0   281,984 
+ io                                    0         0       0         0 
+ ------------------------------ -------- --------- ------- --------- 
+ TOTAL                            14,068   269,448   3,828   282,176 
+ ------------------------------ -------- --------- ------- --------- 
+ *  toolchain objects (libm/libgcc*) 
+ ** RT AI runtime objects (kernels+infrastructure) 
+  Summary - "stm32l4" target 
+  ------------------------------------------------- 
+               FLASH (ro)     %*   RAM (rw)      % 
+  ------------------------------------------------- 
+  RT total         18,000   6.3%      4,020   1.4% 
+  ------------------------------------------------- 
+  TOTAL           287,344           286,004 
+  ------------------------------------------------- 
+  *  rt/total 
+Creating txt report file C:\Users\ronan\.stm32cubemx\network_output\network_analyze_report.txt 
+elapsed time (analyze): 10.874s 
+Model file:      model.onnx 
+Total Flash:     287344 B (280.61 KiB) 
+    Weights:     269344 B (263.03 KiB) 
+    Library:     18000 B (17.58 KiB) 
+Total Ram:       286004 B (279.30 KiB) 
+    Activations: 281984 B (275.38 KiB) 
+    Library:     4020 B (3.93 KiB) 
+    Input:       8160 B (7.97 KiB included in Activations) 
+    Output:      32 B (included in Activations) 
+Done 
+Analyze complete on AI model 
+Required Ram or Flash size for network is bigger than available Ram or Flash

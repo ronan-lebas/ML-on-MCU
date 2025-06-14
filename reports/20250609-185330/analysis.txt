@@ -1,0 +1,151 @@
+
+
+Analyzing model 
+C:/Users/ronan/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/10.0.0/Utilities/windows/stedgeai.exe analyze --target stm32l4 --name network -m C:/Users/ronan/Documents/ETH/S2/Machine Learning on Microcontrollers/project/reports/20250609-185330/model_quantized.onnx --compression none --verbosity 1 --workspace C:/Users/ronan/AppData/Local/Temp/mxAI_workspace420537454208002180467050375062067 --output C:/Users/ronan/.stm32cubemx/network_output 
+ST Edge AI Core v2.0.0-20049 
+Creating c (debug) info json file C:\Users\ronan\AppData\Local\Temp\mxAI_workspace420537454208002180467050375062067\network_c_info.json 
+  
+ Exec/report summary (analyze) 
+ --------------------------------------------------------------------------------------------------------------------------------------------------- 
+ model file         :   C:\Users\ronan\Documents\ETH\S2\Machine Learning on Microcontrollers\project\reports\20250609-185330\model_quantized.onnx    
+ type               :   onnx                                                                                                                         
+ c_name             :   network                                                                                                                      
+ compression        :   none                                                                                                                         
+ options            :   allocate-inputs, allocate-outputs                                                                                            
+ optimization       :   balanced                                                                                                                     
+ target/series      :   stm32l4                                                                                                                      
+ workspace dir      :   C:\Users\ronan\AppData\Local\Temp\mxAI_workspace420537454208002180467050375062067                                            
+ output dir         :   C:\Users\ronan\.stm32cubemx\network_output                                                                                   
+ model_fmt          :   ss/sa per tensor                                                                                                             
+ model_name         :   model_quantized                                                                                                              
+ model_hash         :   0xfd4e84d4618f80caa0b8063f6e56a03c                                                                                           
+ params #           :   19,336 items (75.53 KiB)                                                                                                     
+ --------------------------------------------------------------------------------------------------------------------------------------------------- 
+ input 1/1          :   'input', int8(1x40x51x1), 1.99 KBytes, QLinear(3.131335974,63,int8), activations                                             
+ output 1/1         :   'output_QuantizeLinear_Input', int8(1x8), 8 Bytes, QLinear(0.054745849,-21,int8), activations                                
+ macc               :   9,900,136                                                                                                                    
+ weights (ro)       :   19,648 B (19.19 KiB) (1 segment) / -57,696(-74.6%) vs float model                                                            
+ activations (rw)   :   41,856 B (40.88 KiB) (1 segment) *                                                                                           
+ ram (total)        :   41,856 B (40.88 KiB) = 41,856 + 0 + 0                                                                                        
+ --------------------------------------------------------------------------------------------------------------------------------------------------- 
+ (*) 'input'/'output' buffers can be used from the activations buffer 
+Computing AI RT data/code size (target=stm32l4).. 
+ Model name - model_quantized 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ m_id   layer (original)                                     oshape                 param/size             macc                     connected to 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 0      input ()                                             [b:1,h:40,w:51,c:1] 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 4      fc1_bias_const (DequantizeLinear)                    [b:8]                  8/32 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 5      fc1_weight_Dequant..tput_const (DequantizeLinear)    [b:8,c:64]             512/2,048 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 6      input_QuantizeLinear_Output (QuantizeLinear)         [b:1,h:40,w:51,c:1]                          4,080                            input 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 11     input_DequantizeLinear_Output (DequantizeLinear)     [b:1,h:40,w:51,c:1]                          4,080      input_QuantizeLinear_Output 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 12     _Relu_output_0 (Conv)                                [b:1,h:40,w:51,c:32]   320/1,280           587,552    input_DequantizeLinear_Output 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 13     _Relu_output_0_Qua..ear_Output (QuantizeLinear)      [b:1,h:40,w:51,c:32]                       130,560                   _Relu_output_0 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 14     _Relu_output_0_Deq..ear_Output (DequantizeLinear)    [b:1,h:40,w:51,c:32]                       130,560   _Relu_output_0_Qua..ear_Output 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 15     _pool1_MaxPool_output_0 (MaxPool)                    [b:1,h:20,w:25,c:32]                        64,000   _Relu_output_0_Deq..ear_Output 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 16     _pool1_MaxPool_out..ear_Output (QuantizeLinear)      [b:1,h:20,w:25,c:32]                        32,000          _pool1_MaxPool_output_0 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 17     _pool1_MaxPool_out..ear_Output (DequantizeLinear)    [b:1,h:20,w:25,c:32]                        32,000   _pool1_MaxPool_out..ear_Output 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 18     _Relu_1_output_0 (Conv)                              [b:1,h:20,w:25,c:64]   18,496/73,984     9,216,064   _pool1_MaxPool_out..ear_Output 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 19     _Relu_1_output_0_Q..ear_Output (QuantizeLinear)      [b:1,h:20,w:25,c:64]                        64,000                 _Relu_1_output_0 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 20     _Relu_1_output_0_D..ear_Output (DequantizeLinear)    [b:1,h:20,w:25,c:64]                        64,000   _Relu_1_output_0_Q..ear_Output 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 21     _pool2_GlobalAvera..l_output_0 (GlobalAveragePool)   [b:1,h:1,w:1,c:64]                          32,000   _Relu_1_output_0_D..ear_Output 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 22     _pool2_GlobalAvera..ear_Output (QuantizeLinear)      [b:1,h:1,w:1,c:64]                             128   _pool2_GlobalAvera..l_output_0 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 23     _pool2_GlobalAvera..ear_Output (DequantizeLinear)    [b:1,h:1,w:1,c:64]                             128   _pool2_GlobalAvera..ear_Output 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 28     _Reshape_output_0 (Reshape)                          [b:1,c:64]                                           _pool2_GlobalAvera..ear_Output 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 29     _Reshape_output_0_..ear_Output (QuantizeLinear)      [b:1,c:64]                                     128                _Reshape_output_0 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 30     _Reshape_output_0_..ear_Output (DequantizeLinear)    [b:1,c:64]                                     128   _Reshape_output_0_..ear_Output 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 31     output_QuantizeLinear_Input (Gemm)                   [b:1,c:8]                                      520   _Reshape_output_0_..ear_Output 
+                                                                                                                  fc1_weight_Dequant..tput_const 
+                                                                                                                                  fc1_bias_const 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 32     output_QuantizeLinear_Output (QuantizeLinear)        [b:1,c:8]                                       16      output_QuantizeLinear_Input 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ 33     output (DequantizeLinear)                            [b:1,c:8]                                       16     output_QuantizeLinear_Output 
+ ------ ---------------------------------------------------- ---------------------- --------------- ----------- -------------------------------- 
+ model: macc=10,361,960 weights=77,344 activations=-- io=-- 
+ Number of operations per c-layer 
+ ------- ------ --------------------------------------- ----------- ------------ 
+ c_id    m_id   name (type)                                     #op         type 
+ ------- ------ --------------------------------------- ----------- ------------ 
+ 0       15     _Relu_output_0 (Conv2D)                     651,552   smul_s8_s8 
+ 1       18     _Relu_1_output_0 (Conv2D)                 9,216,064   smul_s8_s8 
+ 2       21     _pool2_GlobalAvera..l_output_0 (Pool)        32,000   smul_s8_s8 
+ 3       31     output_QuantizeLinear_Input (Dense)             520   smul_s8_s8 
+ ------- ------ --------------------------------------- ----------- ------------ 
+ total                                                    9,900,136 
+ Number of operation types 
+ ---------------- ----------- ----------- 
+ operation type             #           % 
+ ---------------- ----------- ----------- 
+ smul_s8_s8         9,900,136      100.0% 
+ Complexity report (model) 
+ ------ ----------------------------------- ------------------------- ------------------------- ------ 
+ m_id   name                                c_macc                    c_rom                     c_id 
+ ------ ----------------------------------- ------------------------- ------------------------- ------ 
+ 15     _pool1_MaxPool_output_0             ||                 6.6%   |                  2.1%   [0] 
+ 18     _Relu_1_output_0                    ||||||||||||||||  93.1%   ||||||||||||||||  95.1%   [1] 
+ 21     _pool2_GlobalAveragePool_output_0   |                  0.3%   |                  0.0%   [2] 
+ 31     output_QuantizeLinear_Input         |                  0.0%   |                  2.8%   [3] 
+ ------ ----------------------------------- ------------------------- ------------------------- ------ 
+ macc=9,900,136 weights=19,648 act=41,856 ram_io=0 
+ Requested memory size by section - "stm32l4" target 
+ ------------------------------ -------- -------- ------- -------- 
+ module                             text   rodata    data      bss 
+ ------------------------------ -------- -------- ------- -------- 
+ NetworkRuntime1000_CM4_GCC.a     29,760        0       0        0 
+ network.o                           592      221   1,912      152 
+ network_data.o                       48       16      88        0 
+ lib (toolchain)*                  1,652        0       0        0 
+ ------------------------------ -------- -------- ------- -------- 
+ RT total**                       32,052      237   2,000      152 
+ ------------------------------ -------- -------- ------- -------- 
+ weights                               0   19,648       0        0 
+ activations                           0        0       0   41,856 
+ io                                    0        0       0        0 
+ ------------------------------ -------- -------- ------- -------- 
+ TOTAL                            32,052   19,885   2,000   42,008 
+ ------------------------------ -------- -------- ------- -------- 
+ *  toolchain objects (libm/libgcc*) 
+ ** RT AI runtime objects (kernels+infrastructure) 
+  Summary - "stm32l4" target 
+  -------------------------------------------------- 
+               FLASH (ro)      %*   RAM (rw)      % 
+  -------------------------------------------------- 
+  RT total         34,289   63.6%      2,152   4.9% 
+  -------------------------------------------------- 
+  TOTAL            53,937             44,008 
+  -------------------------------------------------- 
+  *  rt/total 
+Creating txt report file C:\Users\ronan\.stm32cubemx\network_output\network_analyze_report.txt 
+elapsed time (analyze): 7.093s 
+Model file:      model_quantized.onnx 
+Total Flash:     53937 B (52.67 KiB) 
+    Weights:     19648 B (19.19 KiB) 
+    Library:     34289 B (33.49 KiB) 
+Total Ram:       44008 B (42.98 KiB) 
+    Activations: 41856 B (40.88 KiB) 
+    Library:     2152 B (2.10 KiB) 
+    Input:       2040 B (1.99 KiB included in Activations) 
+    Output:      8 B (included in Activations) 
+Done 
+Analyze complete on AI model
